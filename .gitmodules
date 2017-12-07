@@ -1,0 +1,7 @@
+[submodule "e3-env"]
+	path = e3-env
+	url = https://github.com/icshwi/e3-env
+	ignore = dirty
+[submodule "m-epics-fms14"]
+	path = m-epics-fms14
+	url = https://bitbucket.org/europeanspallationsource/m-epics-fms14
