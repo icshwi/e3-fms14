@@ -1,21 +1,21 @@
 
-#where_am_I := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+where_am_I := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 include $(REQUIRE_TOOLS)/driver.makefile
 
-# APP:=calcApp
+APP:=
 # APPDB:=$(APP)/Db
-# APPSRC:=$(APP)/src
+APPSRC:=$(APP)/src
 
 
-# USR_INCLUDES += -I$(where_am_I)/$(APPSRC)
+USR_INCLUDES += -I$(where_am_I)/$(APPSRC)
 
-# USR_CFLAGS   += -Wno-unused-variable
-# USR_CFLAGS   += -Wno-unused-function
-# USR_CFLAGS   += -Wno-unused-but-set-variable
-# USR_CPPFLAGS += -Wno-unused-variable
-# USR_CPPFLAGS += -Wno-unused-function
-# USR_CPPFLAGS += -Wno-unused-but-set-variable
+USR_CFLAGS   += -Wno-unused-variable
+USR_CFLAGS   += -Wno-unused-function
+USR_CFLAGS   += -Wno-unused-but-set-variable
+USR_CPPFLAGS += -Wno-unused-variable
+USR_CPPFLAGS += -Wno-unused-function
+USR_CPPFLAGS += -Wno-unused-but-set-variable
 
 # TEMPLATES += $(wildcard $(APPDB)/*.db)
 
@@ -30,12 +30,14 @@ include $(REQUIRE_TOOLS)/driver.makefile
 # DBDINC_DEPS = $(subst .c,$(DEP), $(DBDINC_SRCS:$(APPSRC)/%=%))
 
 
-# HEADERS += $(APPSRC)/sCalcPostfix.h
+# HEADERS += $(APPSRC)/fms14PortDriver.h
+
 # HEADERS += $(APPSRC)/aCalcPostfix.h
 # HEADERS += $(DBDINC_HDRS)
 
 
-# SOURCES += $(APPSRC)/sCalcPostfix.c
+SOURCES += $(APPSRC)/fms14PortDriver.cpp
+
 # SOURCES += $(APPSRC)/sCalcPerform.c
 # SOURCES += $(APPSRC)/aCalcPostfix.c
 # SOURCES += $(APPSRC)/aCalcPerform.c
@@ -53,7 +55,7 @@ include $(REQUIRE_TOOLS)/driver.makefile
 # # DBDINC_SRCS should be last of the series of SOURCES
 # SOURCES += $(DBDINC_SRCS)
 
-# DBDS += $(APPSRC)/calcSupport_LOCAL.dbd
+DBDS += $(APPSRC)/fms14PortDriver.dbd
 # DBDS += $(APPSRC)/calcSupport_withSNCSEQ.dbd
 # DBDS += $(APPSRC)/calcSupport_withSSCAN.dbd
 
