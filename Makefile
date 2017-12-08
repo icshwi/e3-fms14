@@ -166,8 +166,8 @@ env:
 conf:
 	$(QUIET) install -m 644 $(TOP)/$(ESS_MODULE_MAKEFILE)  $(EPICS_MODULE_SRC_PATH)/
 
-db: conf
-	$(QUIET) make $(M_OPTIONS) db
+#db: conf
+#	$(QUIET) make $(M_OPTIONS) db
 
 epics:
 #	$(QUIET)echo "ASYN=$(M_ASYN)"                       > $(TOP)/$(EPICS_MODULE_SRC_PATH)/configure/RELEASE
@@ -196,5 +196,5 @@ devclean: clean
 devinstall: install
 devrebuild: rebuild
 devuninstall : uninstall
-devdb : db
+# devdb : db
 
