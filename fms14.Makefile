@@ -1,14 +1,15 @@
 
+
 where_am_I := $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 include $(REQUIRE_TOOLS)/driver.makefile
 
 APP:=
-# APPDB:=$(APP)/Db
+APPDB:=$(APP)/Db
 APPSRC:=$(APP)/src
 
 
-USR_INCLUDES += -I$(where_am_I)/$(APPSRC)
+USR_INCLUDES += -I$(where_am_I)$(APPSRC)
 
 USR_CFLAGS   += -Wno-unused-variable
 USR_CFLAGS   += -Wno-unused-function
@@ -81,4 +82,37 @@ DBDS += $(APPSRC)/fms14PortDriver.dbd
 # USR_LDFLAGS += -Wl,-rpath=/opt/etherlab/lib
 #
 
+
+
+
+
+EPICS_BASE_HOST_BIN = $(EPICS_BASE)/bin/$(EPICS_HOST_ARCH)
+MSI =  $(EPICS_BASE_HOST_BIN)/msi
+
+
+USR_DBFLAGS += -I . -I ..
+USR_DBFLAGS += -I $(EPICS_BASE)/db
+USR_DBFLAGS += -I $(APPD)
+
+
+FMS_TMPS=$(wildcard $(APPDB)/*.template)
+FMS_SUBS=$(wildcard $(APPDB)/*.substitutions)
+
+
+db:  $(FMS_SUBS) $(FMS_TMPS)
+
+$(FMS_SUBS):
+	@printf "Inflating database ... %44s >>> %40s \n" "$@" "$(basename $(@)).db"
+	@rm -f  $(basename $(@)).db.d  $(basename $(@)).db
+	@$(MSI) -D $(USR_DBFLAGS) -o $(basename $(@)).db -S $@  > $(basename $(@)).db.d
+	@$(MSI)    $(USR_DBFLAGS) -o $(basename $(@)).db -S $@
+
+$(FMS_TMPS):
+	@printf "Inflating database ... %44s >>> %40s \n" "$@" "$(basename $(@)).db"
+	@rm -f  $(basename $(@)).db.d  $(basename $(@)).db
+	@$(MSI) -D $(USR_DBFLAGS) -o $(basename $(@)).db $@  > $(basename $(@)).db.d
+	@$(MSI)    $(USR_DBFLAGS) -o $(basename $(@)).db $@
+
+
+.PHONY: db $(FMS_SUBS) $(FMS_TMPS)
 

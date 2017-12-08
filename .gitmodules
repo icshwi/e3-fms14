@@ -5,3 +5,4 @@
 [submodule "m-epics-fms14"]
 	path = m-epics-fms14
 	url = https://bitbucket.org/europeanspallationsource/m-epics-fms14
+	ignore = all

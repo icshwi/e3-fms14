@@ -26,7 +26,13 @@
 
 TOP:=$(CURDIR)
 
+
+
+ifneq (,$(findstring dev,$(MAKECMDGOALS)))
+include $(TOP)/configure/CONFIG_DEV
+else
 include $(TOP)/configure/CONFIG
+endif
 
 -include $(TOP)/$(E3_ENV_NAME)/$(E3_ENV_NAME)
 -include $(TOP)/$(E3_ENV_NAME)/epics-community-env
@@ -56,7 +62,7 @@ endif
 M_OPTIONS := -C $(EPICS_MODULE_SRC_PATH)
 M_OPTIONS += -f $(ESS_MODULE_MAKEFILE)
 M_OPTIONS += LIBVERSION="$(LIBVERSION)"
-M_OPTIONS += PROJECT="$(EPICS_MODULE_NAME)"
+M_OPTIONS += PROJECT="$(PROJECT)"
 M_OPTIONS += EPICS_MODULES="$(EPICS_MODULES)"
 M_OPTIONS += EPICS_LOCATION="$(EPICS_LOCATION)"
 M_OPTIONS += DEFAULT_EPICS_VERSIONS="$(DEFAULT_EPICS_VERSIONS)"
@@ -160,6 +166,8 @@ env:
 conf:
 	$(QUIET) install -m 644 $(TOP)/$(ESS_MODULE_MAKEFILE)  $(EPICS_MODULE_SRC_PATH)/
 
+db: conf
+	$(QUIET) make $(M_OPTIONS) db
 
 epics:
 #	$(QUIET)echo "ASYN=$(M_ASYN)"                       > $(TOP)/$(EPICS_MODULE_SRC_PATH)/configure/RELEASE
@@ -174,4 +182,19 @@ epics-clean:
 
 
 
+
+.PHONY: devinit devenv devbuild devclean devrebuild devuninstall devdb
+
+##
+devinit: git-submodule-sync  $(E3_ENV_NAME)
+	git clone $(DEV_GIT_URL) $(EPICS_MODULE_SRC_PATH)
+	cd $(EPICS_MODULE_SRC_PATH) && git checkout $(EPICS_MODULE_TAG)
+
+devenv: env
+devbuild: build
+devclean: clean
+devinstall: install
+devrebuild: rebuild
+devuninstall : uninstall
+devdb : db
 
